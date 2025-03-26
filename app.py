@@ -5,27 +5,20 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Load the trained model
-try:
-    with open('model.pkl', 'rb') as file:
-        model = pickle.load(file)  
-except Exception as e:
-    print(f"Error loading model: {e}")
-    model = None
+with open('model.pkl', 'rb') as file:
+    model = pickle.load(file)  
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if model is None:
-        return jsonify({"error": "Model not loaded"}), 500
-
     try:
         # Get the input JSON data
         data = request.get_json()
 
-        # Extract features safely
-        feature1 = float(data.get('feature1', 0))
-        feature2 = float(data.get('feature2', 0))
+        # Extract features (modify based on actual feature names)
+        feature1 = data.get('feature1', 0)
+        feature2 = data.get('feature2', 0)
 
-        # Convert to numpy array for prediction
+        # Convert to numpy array for prediction (modify if more features exist)
         input_data = np.array([[feature1, feature2]])
 
         # Make prediction
@@ -41,4 +34,4 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Fixed comment syntax
+    app.run(debug=True)
